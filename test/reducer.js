@@ -61,12 +61,6 @@ describe('Reducer', () => {
       expect(reducer(state, operations.updateAll.success(items))).to.deep.equal(expectedResult);
     });
 
-    it('should handle delete success action correctly', () => {
-      const expectedResult = state;
-      state = state.setIn(['items', '1'], { id: '1', bar: 'baz' })
-      expect(reducer(state, operations.delete.success({ id: '1' }))).to.deep.equal(expectedResult);
-    });
-
     it('should handle insert success action correctly', () => {
       const item = {
         id: '1',
