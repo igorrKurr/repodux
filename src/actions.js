@@ -1,30 +1,21 @@
-const actionForOperation = (action) => (operation) => (payload) => ({
-  type: `${operation}/${action.toUpperCase()}`,
-  payload
-})
+const actions = ['tap', 'success', 'failure', 'optimistic', 'revertOptimistic']
+const operations = ['update', 'create', 'destroy', 'index']
 
-const tap = actionForOperation('tap')
-const success = actionForOperation('success')
-const failure = actionForOperation('failure')
-const optimistic = actionForOperation('optimistic')
-const revertOptimistic = actionForOperation('revertOptimistic')
+const actionType = (operation, action, schema) => `REPO/${schema.name.toUpperCase()}/${operation.toUpperCase()}/${action.toUpperCase()}`;
 
-const operationForResource = (operation) => (resource) => ({
-  tap: tap(`REPO/${resource.name.toUpperCase()}/${operation.toUpperCase()}`),
-  success: success(`REPO/${resource.name.toUpperCase()}/${operation.toUpperCase()}`),
-  failure: failure(`REPO/${resource.name.toUpperCase()}/${operation.toUpperCase()}`),
-  optimistic: optimistic(`REPO/${resource.name.toUpperCase()}/${operation.toUpperCase()}`),
-  revertOptimistic: revertOptimistic(`REPO/${resource.name.toUpperCase()}/${operation.toUpperCase()}`),
-})
+const build = (typeBuilder) => (schema) => {
+  return operations.reduce((acc, operation) => {
+    return {
+      ...acc,
+      [operation]: actions.reduce((acc1, action) => {
+        return {
+          ...acc1,
+          [action]: typeBuilder(actionType(operation, action, schema)),
+        }
+      }, {})
+    }
+  }, {})
+}
 
-const update = operationForResource('update')
-const index = operationForResource('index')
-const destroy = operationForResource('destroy')
-const create = operationForResource('create')
-
-export const buildOperations = (resource) => ({
-  update: update(resource),
-  destroy: destroy(resource),
-  create: create(resource),
-  index: create(resource),
-})
+export const buildTypes = build(type => type)
+export const buildOperations = build(type => (payload) => ({ type, payload }))
