@@ -41,36 +41,68 @@ describe('Reducer', () => {
       expect(reducer(state, operations.update.success(item))).to.deep.equal(expectedResult);
     });
 
-    it('should handle create success action correctly', () => {
+    it('should handle updateAll success action correctly', () => {
+      state = state.setIn(['items', '1'], { id: '1', bar: 'baz' }).setIn(['items', '2'], { id: '1', foo: 'bar' })
       const item = {
         id: '1',
         foo: 'bar'
       }
-      const expectedResult = Immutable({
-        items: {
-          '1': item
-        }
-      });
-      expect(reducer(state, operations.create.success(item))).to.deep.equal(expectedResult);
-    });
-
-    it('should handle index success action correctly', () => {
-      const item = {
-        id: '1',
-        foo: 'bar'
+      const items = {
+        '1': {
+          id: '1',
+          bar: 'foo'
+        },
+        '2': {
+          id: '2',
+          foo: 'baz'
+        },
       }
-      const expectedResult = Immutable({
-        items: {
-          '1': item
-        }
-      });
-      expect(reducer(state, operations.index.success({ '1': item }))).to.deep.equal(expectedResult);
+      const expectedResult = Immutable({ items });
+      expect(reducer(state, operations.updateAll.success(items))).to.deep.equal(expectedResult);
     });
 
-    it('should handle destroy success action correctly', () => {
+    it('should handle delete success action correctly', () => {
       const expectedResult = state;
       state = state.setIn(['items', '1'], { id: '1', bar: 'baz' })
-      expect(reducer(state, operations.destroy.success({ id: '1' }))).to.deep.equal(expectedResult);
+      expect(reducer(state, operations.delete.success({ id: '1' }))).to.deep.equal(expectedResult);
+    });
+
+    it('should handle insert success action correctly', () => {
+      const item = {
+        id: '1',
+        foo: 'bar'
+      }
+      const expectedResult = Immutable({
+        items: {
+          '1': item
+        }
+      });
+      expect(reducer(state, operations.insert.success(item))).to.deep.equal(expectedResult);
+    });
+
+    it('should handle insertAll success action correctly', () => {
+      const item = {
+        id: '1',
+        foo: 'bar'
+      }
+      const expectedResult = Immutable({
+        items: {
+          '1': item
+        }
+      });
+      expect(reducer(state, operations.insertAll.success({ '1': item }))).to.deep.equal(expectedResult);
+    });
+
+    it('should handle delete success action correctly', () => {
+      const expectedResult = state;
+      state = state.setIn(['items', '1'], { id: '1', bar: 'baz' })
+      expect(reducer(state, operations.delete.success({ id: '1' }))).to.deep.equal(expectedResult);
+    });
+
+    it('should handle deleteAll success action correctly', () => {
+      const expectedResult = state;
+      state = state.setIn(['items', '1'], { id: '1', bar: 'baz' }).setIn(['items', '2'], { id: '2', foo: 'bar' })
+      expect(reducer(state, operations.deleteAll.success({ ids: ['1', '2'] }))).to.deep.equal(expectedResult);
     });
 
   });

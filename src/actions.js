@@ -1,7 +1,12 @@
-const actions = ['tap', 'success', 'failure', 'optimistic', 'revertOptimistic']
-const operations = ['update', 'create', 'destroy', 'index']
+import snakeCase from 'lodash/snakeCase';
 
-const actionType = (operation, action, schema) => `REPO/${schema.name.toUpperCase()}/${operation.toUpperCase()}/${action.toUpperCase()}`;
+const actions = ['tap', 'success', 'failure', 'optimistic', 'revertOptimistic']
+const operations = ['update', 'updateAll', 'delete', 'deleteAll', 'insert', 'insertAll']
+
+const actionName = (action) => snakeCase(action)
+
+const actionType = (operation, action, schema) =>
+  `REPO/${snakeCase(schema.name)}/${snakeCase(operation)}/${snakeCase(action)}`.toUpperCase();
 
 const build = (typeBuilder) => (schema) => {
   return operations.reduce((acc, operation) => {
