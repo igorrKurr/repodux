@@ -24,3 +24,4 @@ const build = (typeBuilder) => (schema) => {
 
 export const buildTypes = build(type => type)
 export const buildOperations = build(type => (payload) => ({ type, payload }))
+export const buildOperationsWithStore = (store) => build(type => (payload) => store.dispatch({ type, payload }))

@@ -1,7 +1,7 @@
-import { takeLatest, delay, take } from 'redux-saga';
-import { put, call, takeLatest } from 'redux-saga/effects';
+import flatten from 'lodash/flatten'
+import { put, call, takeLatest, fork } from 'redux-saga/effects';
 
-export const buildSagas = (types, operations, schema) => {
+export const buildSagasFor = (types, operations, schema) => {
   const urls = schema.urls
 
   function * loadFlow() {
@@ -126,4 +126,14 @@ export const buildSagas = (types, operations, schema) => {
   function * watchDeleteAllFlow() {
     yield takeLatest(operations.deleteAll.tap, deleteAllFlow);
   }
+
+  return [
+    watchDeleteAllFlow,
+    watchDeleteFlow,
+    watchUpdateAllFlow,
+    watchUpdateFlow,
+    watchInsertFlow,
+    watchInsertAllFlow,
+    watchLoadFlow,
+  ]
 }

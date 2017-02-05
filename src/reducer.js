@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-export const buildReducer = (types, schema) => {
+export const buildReducerFor = (types, schema) => {
   const initialState = Immutable({
     items: {}
   });
