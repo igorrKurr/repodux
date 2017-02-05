@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 import Immutable from 'seamless-immutable';
 import { buildOperations, buildTypes } from '../src/actions';
-import { buildReducer } from '../src/reducer';
+import { buildReducerFor } from '../src/reducer';
 
 const User = { name: 'user', id: 'id' }
 
@@ -10,7 +10,7 @@ describe('Reducer', () => {
   let reducer; 
   before(() => {
     operations = buildOperations(User)
-    reducer = buildReducer(buildTypes(User), User)
+    reducer = buildReducerFor(buildTypes(User), User)
   })
 
   describe('operations', () => {
