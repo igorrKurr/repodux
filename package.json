@@ -20,8 +20,11 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
+    "inflection": "^1.12.0",
     "lodash": "^4.17.4",
     "redux": "^3.6.0",
+    "redux-saga": "^0.14.3",
+    "reselect": "^2.5.4",
     "seamless-immutable": "^7.0.1"
   }
 }

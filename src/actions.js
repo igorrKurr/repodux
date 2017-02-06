@@ -1,7 +1,7 @@
 import snakeCase from 'lodash/snakeCase';
 
 const actions = ['tap', 'success', 'failure', 'optimistic', 'revertOptimistic']
-const operations = ['load', 'update', 'updateAll', 'delete', 'deleteAll', 'insert', 'insertAll']
+export const operations = ['load', 'update', 'updateAll', 'delete', 'deleteAll', 'insert', 'insertAll']
 
 const actionName = (action) => snakeCase(action)
 

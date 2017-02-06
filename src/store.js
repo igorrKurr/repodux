@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 // import { autoRehydrate } from 'redux-persist';
 import createSagaMiddleware, { END } from 'redux-saga';
 
-export const createStore = (reducers, sagas) => {
+export const configureStore = (reducers, sagas) => {
   const sagaMiddleware = createSagaMiddleware();
 
   const middleware = [sagaMiddleware];

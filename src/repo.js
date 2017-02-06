@@ -5,9 +5,9 @@ import { buildOperations, buildTypes, buildOperationsWithStore } from './actions
 import { buildSagaFor } from './sagas';
 import { buildReducerFor } from './reducer';
 import { buildSelectors } from './selectors';
-import { createStore } from './createStore';
+import { configureStore } from './store';
 
-const createRepo = (schemas) => {
+export const createRepo = (schemas) => {
   const reducersAndSagas = schemas.reduce((acc, schema) => {
     const operations = buildOperations(schema)
     const types = buildTypes(schema)
@@ -30,7 +30,7 @@ const createRepo = (schemas) => {
     yield reducersAndSagas.sagas.map(fork)
   }
 
-  const store = createStore(rootReducer, rootSaga)
+  const store = configureStore(rootReducer, rootSaga)
   const buildRepoOperations = buildOperationsWithStore(store)
 
   const repoOperations = schemas.reduce((acc, schema) => {

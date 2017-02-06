@@ -4,14 +4,14 @@ import { put, call, takeLatest, fork } from 'redux-saga/effects';
 export const buildSagasFor = (types, operations, schema) => {
   const urls = schema.urls
 
-  function * loadFlow() {
+  function * loadFlow(data) {
     try {
       const http = schema.auth.load ? authRequest : request;
 
-      const response = yield call(http, urls.load);
-      return yield put(operations.insertAll.success(schema.insertAllChangeset(response)));
+      const response = yield call(http, urls.load(data));
+      return yield put(operations.insertAll.success(schema.changeset.insertAll(response)));
     } catch (error) {
-      return yield put(operations.insertAll.failure(schema.errorChangeset(error)));
+      return yield put(operations.insertAll.failure(schema.changeset.error(error)));
     }
   }
 
@@ -23,13 +23,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.insertAll ? authRequest : request;
 
-      const response = yield call(http, urls.insertAll, {
+      const response = yield call(http, urls.insertAll(data), {
         method: 'POST',
         body: JSON.stringify(data),
       });
-      yield put(operations.insertAll.success(schema.insertAllChangeset(response)));
+      yield put(operations.insertAll.success(schema.changeset.insertAll(response)));
     } catch (error) {
-      yield put(operations.insertAll.failure(schema.errorChangeset(error)));
+      yield put(operations.insertAll.failure(schema.changeset.error(error)));
     }
   }
 
@@ -41,13 +41,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.insert ? authRequest : request;
 
-      const response = yield call(http, urls.insert, {
+      const response = yield call(http, urls.insert(data), {
         method: 'POST',
         body: JSON.stringify(data),
       });
-      yield put(operations.insert.success(schema.insertChangeset(response)));
+      yield put(operations.insert.success(schema.changeset.insert(response)));
     } catch (error) {
-      yield put(operations.insert.failure(schema.errorChangeset(error)));
+      yield put(operations.insert.failure(schema.changeset.error(error)));
     }
   }
 
@@ -59,13 +59,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.update ? authRequest : request;
 
-      const response = yield call(http, urls.update, {
+      const response = yield call(http, urls.update(data), {
         method: 'PUT',
         body: JSON.stringify(data),
       });
-      yield put(operations.update.success(schema.updateChangeset(response)));
+      yield put(operations.update.success(schema.changeset.update(response)));
     } catch (error) {
-      yield put(operations.update.failure(schema.errorChangeset(error)));
+      yield put(operations.update.failure(schema.changeset.error(error)));
     }
   }
 
@@ -77,13 +77,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.updateAll ? authRequest : request;
 
-      const response = yield call(http, urls.updateAll, {
+      const response = yield call(http, urls.updateAll(data), {
         method: 'PUT',
         body: JSON.stringify(data),
       });
-      yield put(operations.updateAll.success(schema.updateAllChangeset(response)));
+      yield put(operations.updateAll.success(schema.changeset.updateAll(response)));
     } catch (error) {
-      yield put(operations.updateAll.failure(schema.errorChangeset(error)));
+      yield put(operations.updateAll.failure(schema.changeset.error(error)));
     }
   }
 
@@ -95,13 +95,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.delete ? authRequest : request;
 
-      const response = yield call(http, urls.delete, {
+      const response = yield call(http, urls.delete(data), {
         method: 'DELETE',
         body: JSON.stringify(data),
       });
-      yield put(operations.delete.success(schema.deleteChangeset(response)));
+      yield put(operations.delete.success(schema.changeset.delete(response)));
     } catch (error) {
-      yield put(operations.delete.failure(schema.errorChangeset(error)));
+      yield put(operations.delete.failure(schema.changeset.error(error)));
     }
   }
 
@@ -113,13 +113,13 @@ export const buildSagasFor = (types, operations, schema) => {
     try {
       const http = schema.auth.deleteAll ? authRequest : request;
 
-      const response = yield call(http, urls.deleteAll, {
+      const response = yield call(http, urls.deleteAll(data), {
         method: 'DELETE',
         body: JSON.stringify(data),
       });
-      yield put(operations.deleteAll.success(schema.deleteAllChangeset(response)));
+      yield put(operations.deleteAll.success(schema.changeset.deleteAll(response)));
     } catch (error) {
-      yield put(operations.deleteAll.failure(schema.errorChangeset(error)));
+      yield put(operations.deleteAll.failure(schema.changeset.error(error)));
     }
   }
 
