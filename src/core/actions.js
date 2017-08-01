@@ -1,12 +1,11 @@
 import snakeCase from 'lodash/snakeCase';
+import camelCase from 'lodash/camelCase';
 
-const actions = ['tap', 'success', 'failure', 'optimistic', 'revertOptimistic']
+const actions = ['tap', 'success', 'failure']
 export const operations = ['load', 'update', 'updateAll', 'delete', 'deleteAll', 'insert', 'insertAll']
 
-const actionName = (action) => snakeCase(action)
-
 const actionType = (operation, action, schema) =>
-  `REPO/${snakeCase(schema.name)}/${snakeCase(operation)}/${snakeCase(action)}`.toUpperCase();
+  `${snakeCase(schema)}/${snakeCase(operation)}/${snakeCase(action)}`.toUpperCase();
 
 const build = (typeBuilder) => (schema) => {
   return operations.reduce((acc, operation) => {
@@ -22,6 +21,21 @@ const build = (typeBuilder) => (schema) => {
   }, {})
 }
 
+const buildForEvents = (func) => (events) => events.reduce((acc, event) => {
+  return {
+    ...acc,
+    [camelCase(event)]: func(event)
+  }
+}, {})
+
+const buildTypeEvent = (event) => `${event.split(':').map(snakeCase).join('/')}`.toUpperCase();
+const buildActionEvent = (event) => (payload) => ({
+  type: buildTypeEvent(event),
+  payload
+})
+
 export const buildTypes = build(type => type)
 export const buildOperations = build(type => (payload) => ({ type, payload }))
-export const buildOperationsWithStore = (store) => build(type => (payload) => store.dispatch({ type, payload }))
+
+export const buildEventTypes = buildForEvents(buildTypeEvent)
+export const buildEventActions = buildForEvents(buildActionEvent)
