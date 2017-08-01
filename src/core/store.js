@@ -3,7 +3,6 @@ import { autoRehydrate } from 'redux-persist';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { combineReducers } from 'redux';
 import createLogger from 'redux-logger';
-import { clearStore } from '../persist';
 import { fork, all } from 'redux-saga/effects';
 import localForage from 'localforage';
 import { persistStore } from 'redux-persist';
