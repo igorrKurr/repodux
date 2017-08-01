@@ -3,6 +3,8 @@ import { buildSelectors } from './selectors';
 import { buildTypes, buildOperations } from './actions';
 import { buildSagas } from './sagas';
 
+import { createSelector } from 'reselect';
+
 export class Resource {
   constructor(config = {}) {
     const idProp = config.id || this.id || 'id'
@@ -28,6 +30,10 @@ export class Resource {
 
     Object.keys(actions).forEach(action => this[action] = actions[action])
     Object.keys(selectors).forEach(selector => this[selector] = selectors[selector])
+
+    this.baseSelector = state => state[name]
+
+    this.select = (f) => createSelector([baseSelector], f)
   }
 
   normalize = (data) => {
