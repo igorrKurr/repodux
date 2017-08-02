@@ -54,7 +54,7 @@ export const storePersist = (store) => {
 
 export const clearStore = (store) => persistStore(store, config).purge;
 
-export const buildStore = (resources, { logger = false, persist = true }) => {
+export const buildStore = (resources, { logger = false, persist = true } = {}) => {
   if (!resources || resources.length === 0) {
     throw "Passing empty resources is not allowed"
   }
