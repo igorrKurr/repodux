@@ -1,5 +1,4 @@
-import upperFirst from 'lodash/upperFirst'
-import { put, call, takeLatest, fork } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga/effects';
 
 const createSagaPlaceholder = (schema, actionName) => function * (data) {
   console.warn(`
@@ -7,6 +6,7 @@ const createSagaPlaceholder = (schema, actionName) => function * (data) {
     I've just received some data.
     Please make me do something meaningful with it:-)
   `, data)
+  yield false
 }
 
 export const buildSagas = (schema) => {

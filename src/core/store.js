@@ -31,7 +31,9 @@ const rehydrationSeletor = state => state.rehydration
 
 export const rehydratedSelector = createSelector(
   [rehydrationSeletor],
-  (rehydration) => rehydration.isRehydrated
+  (rehydration) => {
+    return rehydration.isRehydrated
+  }
 )
 
 const config = {
@@ -56,7 +58,7 @@ export const clearStore = (store) => persistStore(store, config).purge;
 
 export const buildStore = (resources, { logger = false, persist = true } = {}) => {
   if (!resources || resources.length === 0) {
-    throw "Passing empty resources is not allowed"
+    throw new Error("Passing empty resources is not allowed")
   }
 
   const sagaMiddleware = createSagaMiddleware();
@@ -64,7 +66,7 @@ export const buildStore = (resources, { logger = false, persist = true } = {}) =
   const reducers = resources.map(r => r.reducer)
   const sagas = resources.map(r => r.sagas)
 
-  const rootReducer = combineReducers(Object.assign(...[{}, storeReducer, ...reducers]))
+  const rootReducer = combineReducers(Object.assign(...[{}, { rehydration: storeReducer }, ...reducers]))
   const rootSaga = function * root () {
     yield all(Array.prototype.concat(...sagas).map(fork))
   }
