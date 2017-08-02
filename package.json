@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-plugin-transform-regenerator": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -23,7 +24,7 @@
     "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0"
   },
   "scripts": {
-    "build:lib": "rm -rf lib && NODE_ENV=production ./node_modules/.bin/babel src --out-dir lib --presets es2015,stage-0,react --copy-files",
+    "build:lib": "rm -rf lib && NODE_ENV=production ./node_modules/.bin/babel src --out-dir lib --presets es2015,stage-0,react --copy-files --plugins transform-regenerator",
     "build": "npm run build:lib"
   }
 }
