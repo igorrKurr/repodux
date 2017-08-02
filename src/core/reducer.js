@@ -7,6 +7,7 @@ export const buildReducer = (types, id) => {
     deleting: false,
     loading: false,
     updating: false,
+    error: false,
   });
 
   const handlers = {
@@ -76,6 +77,9 @@ export const buildReducer = (types, id) => {
     },
     [types.deleteAll.failure]: (state, { payload }) => {
       return state.set('deleting', false)
+    },
+    [types.error.clear]: (state) => {
+      return state.set('error', false)
     },
   };
 

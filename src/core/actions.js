@@ -21,15 +21,16 @@ const build = (typeBuilder) => (schema) => {
   }, {})
 }
 
-const buildForEvents = (func) => (events) => events.reduce((acc, event) => {
+const buildForEvents = (func) => (events, schema) => events.reduce((acc, event) => {
   return {
     ...acc,
-    [camelCase(event)]: func(event)
+    [camelCase(event)]: func(event, schema)
   }
 }, {})
 
-const buildTypeEvent = (event) => `${event.split(':').map(snakeCase).join('/')}`.toUpperCase();
-const buildActionEvent = (event) => (payload) => ({
+const buildTypeEventBase = (event) => `${event.split(':').map(snakeCase).join('/')}`.toUpperCase()
+const buildTypeEvent = (event, schema) => schema ? `${snakeCase(schema)}/${buildTypeEventBase(event)}` : buildTypeEventBase(event)
+const buildActionEvent = (event, schema) => (payload) => ({
   type: buildTypeEvent(event),
   payload
 })

@@ -36,11 +36,6 @@ export const rehydratedSelector = createSelector(
   }
 )
 
-const config = {
-  storage: localForage,
-  transforms: [immutableTransform],
-  blacklist: ['rehydration']
-}
 
 export const storePersist = (store) => {
   return new Promise((resolve, reject) => {
@@ -59,6 +54,13 @@ export const clearStore = (store) => persistStore(store, config).purge;
 export const buildStore = (resources, { logger = false, persist = true } = {}) => {
   if (!resources || resources.length === 0) {
     throw new Error("Passing empty resources is not allowed")
+  }
+
+  const resourceTransforms = resources.map(r => r.name)
+  const config = {
+    storage: localForage,
+    transforms: [immutableTransform, resourceTransforms],
+    blacklist: ['rehydration']
   }
 
   const sagaMiddleware = createSagaMiddleware();

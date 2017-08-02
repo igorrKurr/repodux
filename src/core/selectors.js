@@ -87,11 +87,17 @@ export const buildSelectors = (schema) => {
     })
   )
 
+  const errorSelector = createSelector(
+    [schemaSelector],
+    (state) => state.error
+  )
+
   return {
     all: allSelector,
     index: () => itemsSelector,
     count: () => countSelector,
     getById: getByIdSelector,
-    status: () => statusSelector
+    status: () => statusSelector,
+    error: () => errorSelector,
   }
 }

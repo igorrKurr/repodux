@@ -1,9 +1,10 @@
+import { createSelector } from 'reselect';
+
 import { buildReducer, prepareData } from './reducer';
 import { buildSelectors } from './selectors';
-import { buildTypes, buildOperations } from './actions';
+import { buildTypes, buildOperations, buildEventTypes, buildEventActions } from './actions';
 import { buildSagas } from './sagas';
-
-import { createSelector } from 'reselect';
+import { connect } from './connect';
 
 export class Resource {
   constructor() {
@@ -13,8 +14,14 @@ export class Resource {
     const name = this.name || this.constructor.name
     this.name = name
 
-    const types = buildTypes(this.name)
-    const actions = buildOperations(this.name)
+    const baseTypes = buildTypes(this.name)
+    const errorTypes = buildEventTypes(['error:clear'], this.name)
+    const types = {...baseTypes, ...errorTypes}
+
+    const operations = buildOperations(this.name)
+    const errorOperations = buildEventActions(['error:clear'], this.name)
+    const actions = {...operations, ...errorOperations}
+
     const selectors = buildSelectors(this.name)
 
     this.types = types
@@ -34,6 +41,7 @@ export class Resource {
     const baseSelector = state => state[name]
 
     this.select = (f) => createSelector([baseSelector], f)
+    this.connect = connect(this)
   }
 
   normalize = (data) => {
