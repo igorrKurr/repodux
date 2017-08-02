@@ -40,7 +40,12 @@ export class Resource {
 
     const baseSelector = state => state[this.name]
 
-    this.select = (f) => createSelector([baseSelector], f)
+    this.select = (f, name) => {
+      const selector = createSelector([baseSelector], f)
+      this.selectors[name] = selector
+      return selector
+    }
+
     this.connect = connect(this)
   }
 
