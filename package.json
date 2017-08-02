@@ -23,7 +23,7 @@
     "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0"
   },
   "scripts": {
-    "build:lib": "rm -rf lib && NODE_ENV=production ./node_modules/.bin/babel src --out-dir lib --presets es-2015-without-regenerator,stage-0,react --copy-files",
+    "build:lib": "rm -rf lib && NODE_ENV=production ./node_modules/.bin/babel src --out-dir lib --presets es2015-without-regenerator,stage-0,react --copy-files",
     "build": "npm run build:lib"
   }
 }
