@@ -12,7 +12,7 @@ export class Resource {
     this.id = idProp
 
     const name = this.name || this.constructor.name
-    this.name = name
+    this.name = name.toLowerCase()
 
     const baseTypes = buildTypes(this.name)
     const errorTypes = buildEventTypes(['error:clear'], this.name)
@@ -38,7 +38,7 @@ export class Resource {
     Object.keys(actions).forEach(action => this[action] = actions[action])
     Object.keys(selectors).forEach(selector => this[selector] = selectors[selector])
 
-    const baseSelector = state => state[name]
+    const baseSelector = state => state[this.name]
 
     this.select = (f) => createSelector([baseSelector], f)
     this.connect = connect(this)

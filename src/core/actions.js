@@ -1,5 +1,5 @@
 import snakeCase from 'lodash/snakeCase';
-import camelCase from 'lodash/camelCase';
+import set from 'lodash/set';
 
 const actions = ['tap', 'success', 'failure']
 export const operations = ['load', 'update', 'updateAll', 'delete', 'deleteAll', 'insert', 'insertAll']
@@ -24,14 +24,14 @@ const build = (typeBuilder) => (schema) => {
 const buildForEvents = (func) => (events, schema) => events.reduce((acc, event) => {
   return {
     ...acc,
-    [camelCase(event)]: func(event, schema)
+    ...set(acc, event.replace(':', '.'), func(event, schema)),
   }
 }, {})
 
 const buildTypeEventBase = (event) => `${event.split(':').map(snakeCase).join('/')}`.toUpperCase()
-const buildTypeEvent = (event, schema) => schema ? `${snakeCase(schema)}/${buildTypeEventBase(event)}` : buildTypeEventBase(event)
+const buildTypeEvent = (event, schema) => schema ? `${snakeCase(schema)}/${buildTypeEventBase(event)}`.toUpperCase() : buildTypeEventBase(event)
 const buildActionEvent = (event, schema) => (payload) => ({
-  type: buildTypeEvent(event),
+  type: buildTypeEvent(event, schema),
   payload
 })
 

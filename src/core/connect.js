@@ -41,7 +41,7 @@ export function connect (resource) {
             if (selector) {
               return {
                 ...acc,
-                [p]: selector()
+                [p]: selector
               }
             } else {
               return acc
@@ -65,11 +65,30 @@ export function connect (resource) {
         }
 
         mapStateToProps = createStructuredSelector(selectedProps);
-
-        mapDispatchToProps = (dispatch) => bindActionCreators(selectedActions, dispatch)
+        mapDispatchToProps = (dispatch) => {
+          return Object.keys(selectedActions).reduce((acc, action) => {
+            return {
+              ...acc,
+              [action]: bindActionCreators(selectedActions[action], dispatch)
+            }
+          }, {})
+        }
+        const mergeProps = (stateProps, dispatchProps, ownProps) => {
+          return ({
+            [resource.name]: {
+              ...stateProps,
+              ...dispatchProps,
+              error: {
+                message: stateProps.error,
+                ...dispatchProps.error,
+              }
+            },
+            ...ownProps,
+          })
+        }
 
         return React.createElement(
-          connect(mapStateToProps, mapDispatchToProps)(WrappedComponent),
+          reduxConnect(mapStateToProps, mapDispatchToProps, mergeProps)(WrappedComponent),
           { ...this.props, ...extraProps }
         );
       }

@@ -11,6 +11,7 @@ import {REHYDRATE} from 'redux-persist/constants';
 import { createSelector } from 'reselect';
 
 import { immutableTransform } from '../utils/immutable';
+import { createTransform } from './persist';
 
 export const INITIAL_STATE = Immutable({
   isRehydrated: false
@@ -36,32 +37,34 @@ export const rehydratedSelector = createSelector(
   }
 )
 
-
-export const storePersist = (store) => {
-  return new Promise((resolve, reject) => {
-    persistStore(store, config, (err, state) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(state)
-      }
-    });
-  })
-}
-
-export const clearStore = (store) => persistStore(store, config).purge;
-
 export const buildStore = (resources, { logger = false, persist = true } = {}) => {
   if (!resources || resources.length === 0) {
     throw new Error("Passing empty resources is not allowed")
   }
 
-  const resourceTransforms = resources.map(r => r.name)
+  const resourceTransforms = createTransform(resources.map(r => r.name))
   const config = {
     storage: localForage,
     transforms: [immutableTransform, resourceTransforms],
-    blacklist: ['rehydration']
+    blacklist: ['rehydration'],
+    keyPrefix: 'repodux:',
+    debounce: 300,
   }
+
+
+  const storePersist = (store) => {
+    return new Promise((resolve, reject) => {
+      persistStore(store, config, (err, state) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(state)
+        }
+      });
+    })
+  }
+
+  const clearStore = (store) => persistStore(store, config).purge;
 
   const sagaMiddleware = createSagaMiddleware();
 
