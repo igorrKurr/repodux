@@ -1,5 +1,4 @@
 import { HttpError, NetworkError } from './errors';
-
 import { call, select } from 'redux-saga/effects';
 
 const TIMEOUT_TIME = 5000;

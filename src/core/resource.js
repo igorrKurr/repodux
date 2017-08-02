@@ -6,11 +6,11 @@ import { buildSagas } from './sagas';
 import { createSelector } from 'reselect';
 
 export class Resource {
-  constructor(config = {}) {
-    const idProp = config.id || this.id || 'id'
+  constructor() {
+    const idProp = this.id || 'id'
     this.id = idProp
 
-    const name = config.name || this.name || this.constructor.name
+    const name = this.name || this.constructor.name
     this.name = name
 
     const types = buildTypes(this.name)
@@ -31,7 +31,7 @@ export class Resource {
     Object.keys(actions).forEach(action => this[action] = actions[action])
     Object.keys(selectors).forEach(selector => this[selector] = selectors[selector])
 
-    this.baseSelector = state => state[name]
+    const baseSelector = state => state[name]
 
     this.select = (f) => createSelector([baseSelector], f)
   }
