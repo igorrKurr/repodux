@@ -46,6 +46,12 @@ export class Resource {
       return selector
     }
 
+    this.link = (s, f, name) => {
+      const selector = createSelector(s, f)
+      this.selectors[name] = selector
+      return selector
+    }
+
     this.connect = connect(this)
   }
 
