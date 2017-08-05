@@ -6,6 +6,21 @@ import { buildTypes, buildOperations, buildEventTypes, buildEventActions } from 
 import { buildSagas } from './sagas';
 import { connect } from './connect';
 
+function proxify(obj) {
+  const handler = {
+    set(target, prop, value) {
+      if (value === createSelector) {
+        target.selectors[prop] = value
+      }
+
+      target[prop] = value
+      return true
+    }
+  }
+
+  return new Proxy(obj, handler)
+}
+
 export class Resource {
   constructor() {
     const idProp = this.id || 'id'
@@ -40,17 +55,9 @@ export class Resource {
 
     const baseSelector = state => state[this.name]
 
-    this.select = (f, name) => {
-      const selector = createSelector([baseSelector], f)
-      this.selectors[name] = selector
-      return selector
-    }
+    this.select = (f) => createSelector([baseSelector], f)
 
-    this.link = (s, f, name) => {
-      const selector = createSelector(s, f)
-      this.selectors[name] = selector
-      return selector
-    }
+    this.link = (s, f) => createSelector(s, f)
 
     this.connect = connect(this)
   }
@@ -59,3 +66,5 @@ export class Resource {
     return prepareData(this.id, data)
   }
 }
+
+Resource.prototype = proxify(Resource.prototype)
