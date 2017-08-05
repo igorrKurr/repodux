@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 
 import { buildReducer, prepareData } from './reducer';
 import { buildSelectors } from './selectors';
@@ -6,10 +6,12 @@ import { buildTypes, buildOperations, buildEventTypes, buildEventActions } from 
 import { buildSagas } from './sagas';
 import { connect } from './connect';
 
+const isSelector = (f) => f.toString() === defaultMemoize().toString()
+
 function proxify(obj) {
   const handler = {
     set(target, prop, value) {
-      if (value === createSelector) {
+      if (isSelector(value)) {
         target.selectors[prop] = value
       }
 
@@ -60,11 +62,11 @@ export class Resource {
     this.link = (s, f) => createSelector(s, f)
 
     this.connect = connect(this)
+
+    return proxify(this)
   }
 
   normalize = (data) => {
     return prepareData(this.id, data)
   }
 }
-
-Resource.prototype = proxify(Resource.prototype)
