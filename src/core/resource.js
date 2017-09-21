@@ -31,7 +31,7 @@ export class Resource {
     const name = this.name || this.constructor.name
     this.name = name.toLowerCase()
 
-    const immutable = config.immutable || this.immutable
+    const immutable = this.immutable
 
     const baseTypes = buildTypes(this.name)
     const errorTypes = buildEventTypes(['error:clear'], this.name)
