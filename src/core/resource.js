@@ -31,6 +31,8 @@ export class Resource {
     const name = this.name || this.constructor.name
     this.name = name.toLowerCase()
 
+    const immutable = config.immutable || this.immutable
+
     const baseTypes = buildTypes(this.name)
     const errorTypes = buildEventTypes(['error:clear'], this.name)
     const types = {...baseTypes, ...errorTypes}
@@ -45,7 +47,7 @@ export class Resource {
     this.actions = actions
     this.selectors = selectors
 
-    const reducer = { [this.name]: buildReducer(this.types, this.id) }
+    const reducer = { [this.name]: buildReducer(this.types, this.id, { immutable }) }
     this.reducer = reducer
 
     const sagas = buildSagas(this)
