@@ -257,7 +257,8 @@ const buildReducerPlain = (types, id) => {
     },
     [types.delete.success]: (state, { payload }) => {
       return {
-        ...omit(state, payload[id]),
+        ...state,
+        items: omit(state.items, payload[id]),
         deleting: false
       }
     },
@@ -282,7 +283,8 @@ const buildReducerPlain = (types, id) => {
         };
       }
       return {
-        ...omit(state, ids),
+        ...state,
+        items: omit(state.items, ids),
         deleting: false
       }
     },
