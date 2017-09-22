@@ -1,4 +1,5 @@
 import Immutable from 'seamless-immutable';
+import omit from 'lodash/omit';
 
 export const buildReducerImmutable = (types, id) => {
   const initialState = Immutable({
