@@ -24,11 +24,11 @@ function proxify(obj) {
 }
 
 export class Resource {
-  constructor() {
-    const idProp = this.id || 'id'
+  constructor(config = {}) {
+    const idProp = config.id || 'id'
     this.id = idProp
 
-    const name = this.name || this.constructor.name
+    const name = config.name || this.constructor.name
     this.name = name.toLowerCase()
 
     const immutable = this.immutable
