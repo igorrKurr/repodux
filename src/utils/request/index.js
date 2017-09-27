@@ -49,20 +49,4 @@ export function request(url, options) {
     })
 }
 
-export const authRequest = function * authRequest(url, options) {
-  const token = yield select(state => state.auth.token);
-
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-  };
-  if (options && ['PUT', 'POST', 'DELETE'].includes(options.method)) {
-    headers['Content-Type'] = 'application/json';
-  }
-
-  return yield call(request, url, {
-    ...options,
-    headers
-  });
-}
-
 export default request;
