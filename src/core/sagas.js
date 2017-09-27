@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import { takeLatest } from 'redux-saga/effects';
 
 const createSagaPlaceholder = (schema, actionName) => function * (data) {

@@ -21,7 +21,8 @@
     "react-dom": "^15.6.1"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0"
+    "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0",
+    "regenerator-runtime": "^0.11.0"
   },
   "scripts": {
     "build:lib": "rm -rf lib && NODE_ENV=production ./node_modules/.bin/babel src --out-dir lib --presets es2015,stage-2,react --copy-files",
