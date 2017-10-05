@@ -7,6 +7,7 @@ import { buildSagas } from './sagas';
 import { connect } from './connect';
 
 const isSelector = (f) => f.toString() === defaultMemoize().toString()
+const isGenerator = (f) => f.isGenerator()
 
 function proxify(obj) {
   const handler = {
@@ -15,7 +16,12 @@ function proxify(obj) {
         target.selectors[prop] = value
       }
 
-      target[prop] = value
+      if (isGenerator(value)) {
+        target[prop] = value.bind(target)
+      } else {
+        target[prop] = value
+      }
+
       return true
     }
   }
