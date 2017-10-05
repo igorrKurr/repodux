@@ -1,4 +1,5 @@
 import { createSelector, defaultMemoize } from 'reselect';
+import isFunction from 'lodash/isFunction';
 
 import { buildReducer, prepareData } from './reducer';
 import { buildSelectors } from './selectors';
@@ -6,8 +7,8 @@ import { buildTypes, buildOperations, buildEventTypes, buildEventActions } from 
 import { buildSagas } from './sagas';
 import { connect } from './connect';
 
-const isSelector = (f) => f.toString() === defaultMemoize().toString()
-const isGenerator = (f) => f.isGenerator()
+const isSelector = (f) => isFunction(f) && (f.toString() === defaultMemoize().toString())
+const isGenerator = (f) => isFunction(f) && f.isGenerator()
 
 function proxify(obj) {
   const handler = {
