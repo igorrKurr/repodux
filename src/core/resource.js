@@ -8,7 +8,7 @@ import { buildSagas } from './sagas';
 import { connect } from './connect';
 
 const isSelector = (f) => isFunction(f) && (f.toString() === defaultMemoize().toString())
-const isGenerator = (f) => isFunction(f) && f.isGenerator()
+const isGenerator = (f) => isFunction(f) && f.constructor === (function*(){}).constructor
 
 function proxify(obj) {
   const handler = {
